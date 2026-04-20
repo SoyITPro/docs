@@ -107,7 +107,7 @@ Import-Certificate -FilePath "C:\Temp\mi-firma-rdp.cer" -CertStoreLocation "Cert
 
 ### Configurar Directiva de Grupo (GPO)
 > [!NOTE] 
-> Puedes distribuír la firma por GPO a los equipos del dominio para que confíen solo en esos .RDP con la firma establecida.
+> Puedes distribuir el certificado de firma por GPO a los equipos del dominio para que confíen solo en esos .RDP con la firma establecida.
 
 Presiona Win + R, escribe gpedit.msc y presiona Enter
 
