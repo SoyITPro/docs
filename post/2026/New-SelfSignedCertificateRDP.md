@@ -1,0 +1,119 @@
+# 🔐 Auto-firmar archivos RDP en Windows
+
+Guía paso a paso para crear un certificado autofirmado y usarlo para firmar archivos `.rdp`, para las advertencias de seguridad al abrirlos en Windows 11 después de instalar las actualizaciones de abril de 2026 **KB5083769**.
+
+
+## 📹 Video completo
+
+[![Ver video en YouTube](https://img.youtube.com/vi/ZLx9EZa_MnM/maxresdefault.jpg)](https://youtu.be/ZLx9EZa_MnM)
+
+## 📋 Requisitos
+
+- Privilegios de administrador en Terminal o VScode
+
+
+---
+
+## 🛠️ Paso 1: Crear un certificado autofirmado
+
+### Opción A: Usando PowerShell (Recomendada - Más Rápida)
+
+Abre **PowerShell como Administrador** y ejecuta:
+
+```powershell
+New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=MyRDPCert" -CertStoreLocation "Cert:\LocalMachine\My"
+
+```
+
+### Opción B: Usando el complemento MMC
+
+Presiona Win + R, escribe certlm.msc y presiona Enter
+
+Expande Personal → haz clic derecho en Certificados → Todas las tareas → Solicitar nuevo certificado
+
+Sigue el asistente y crea un certificado con propósito de Firma de código
+
+Nómbralo como prefieras (ej: "Mi Firma RDP")
+
+## 📄 Paso 2: Obtener la huella digital (Thumbprint)
+Desde PowerShell (Más Rápido)
+```powershell
+Get-ChildItem -Path "Cert:\LocalMachine\My" | Where-Object { $_.Subject -like "*RDP-Firma-Local*" } | Format-List Subject, Thumbprint
+```
+
+Desde el complemento MMC
+Abre certlm.msc → Personal → Certificados
+
+- Doble clic en tu certificado
+
+- Ve a la pestaña Detalles
+
+- Busca el campo Huella digital
+
+- Copia el valor y elimina todos los espacios (debe quedar una cadena continua)
+
+> [!IMPORTANT] ⚠️ Importante: La huella debe ser una cadena continua sin espacios. Ejemplo válido: a94a1e8a27d8f257f8d7d5d9a3f2c1b0e4d5c6b7
+
+## ✍️ Paso 3: Firmar el archivo RDP
+Abre Símbolo del sistema (cmd.exe) como Administrador
+
+Ejecuta el siguiente comando:
+
+```cmd
+rdpsign /sha256 "HUELLA_DIGITAL_SIN_ESPACIOS" "C:\ruta\completa\a\tu\archivo.rdp"
+```
+Ejemplo práctico:
+
+```cmd
+rdpsign /sha256 a94a1e8a27d8f257f8d7d5d9a3f2c1b0e4d5c6b7 "C:\Users\Usuario\Desktop\servidor.rdp"
+```
+
+
+## ✅ Paso 4: Verificar la firma (Opcional)
+Para verificar que el archivo está firmado correctamente sin modificarlo:
+
+```cmd
+rdpsign /l "C:\ruta\archivo.rdp"
+```
+Si la firma es válida, verás un mensaje confirmándolo o puedes abrir el archivo RDP con notepad y verificar la firma.
+
+## 🚀 Paso 5: Hacer que Windows confíe en tu firma
+
+Para que Windows no muestre la advertencia de "Editor no confiable":
+
+Instalar el certificado en el almacén raíz
+powershell
+- ### Exportar el certificado con PowerShell
+
+Puedes utilizar la MMC y exportar el certificado manualmente utilizando x.509 codificado base 64 .CER o utilizar en PowerShell 
+
+```powershell
+$cert = Get-ChildItem -Path "Cert:\LocalMachine\My" | Where-Object { $_.Subject -like "*RDP-Firma-Local*" }
+Export-Certificate -Cert $cert -FilePath "C:\Temp\mi-firma-rdp.cer"
+```
+La importanción la puedes realizar vía MMC en:
+- Entidades de certificación de raiz de confianza
+- Editores de confianza
+
+Puedes importar los certificados también vía PowerShell:
+
+
+```powershell 
+Import-Certificate -FilePath "C:\Temp\mi-firma-rdp.cer" -CertStoreLocation "Cert:\LocalMachine\Root"
+```
+
+
+### Configurar Directiva de Grupo (GPO)
+> [!NOTE] Puedes distribuír la firma por GPO a los equipos del dominio para que confíen solo en esos .RDP con la firma establecida.
+
+Presiona Win + R, escribe gpedit.msc y presiona Enter
+
+Navega a:
+
+```text
+Configuración del Equipo → Plantillas Administrativas → Componentes de Windows → Servicios de Escritorio Remoto → Cliente de Conexión a Escritorio Remoto
+Habilita la opción: Especificar las huellas digitales SHA1 de los certificados que representan editores .rdp de confianza
+```
+Habilita la directiva y agrega la Huella, puedes separar por , diferentes Thumbprint
+
+Haz clic en Aceptar
