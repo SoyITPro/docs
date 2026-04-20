@@ -120,3 +120,36 @@ Habilita la opción: Especificar las huellas digitales SHA1 de los certificados 
 Habilita la directiva y agrega la Huella, puedes separar por , diferentes Thumbprint
 
 Haz clic en Aceptar
+
+---
+
+## ✅ Verificación
+
+Para confirmar que todo funciona correctamente:
+
+- Abre el archivo `.rdp` firmado con editor de texto y verifica que contenga la firma digital
+- La advertencia de "Editor no confiable" debería desaparecer al abrir el archivo
+- Puedes verificar el estado de la firma con: `rdpsign /l "archivo.rdp"`
+
+## ⚠️ Solución de Problemas
+
+| Problema | Causa | Solución |
+|----------|-------|----------|
+| "El certificado no es válido" | El certificado no es para Firma de Código | Crear un nuevo certificado con `-Type CodeSigningCert` |
+| Error al firmar | Certificado no encontrado | Verificar que la huella digital sea correcta (sin espacios) |
+| Windows sigue mostrando advertencia | El certificado no está en Raíz de Confianza | Importar el certificado en `Cert:\LocalMachine\Root` |
+| `rdpsign` no se encuentra | El comando no está en PATH | Usar la ruta completa: `C:\Windows\System32\rdpsign.exe` |
+
+## 📝 Notas Adicionales
+
+- **Certificados autofirmados**: Solo son válidos en tu equipo o en equipos donde los importes específicamente
+- **Dominios**: Si usas Active Directory, distribuye el certificado por GPO para centralizar la confianza
+- **Seguridad**: Los certificados autofirmados no son verificados por una autoridad externa, son solo para evitar advertencias locales
+- **KB5083769**: Esta actualización aumentó los requisitos de seguridad para los archivos `.rdp`, siendo necesaria esta firma
+
+## 🔗 Referencias
+
+- [Microsoft - Remote Desktop Connection Manager](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/rdp-files)
+- [KB5083769 - RDP Security Updates](https://support.microsoft.com/en-us/kb/5083769)
+- [New-SelfSignedCertificate - PowerShell](https://learn.microsoft.com/en-us/powershell/module/pki/new-selfsignedcertificate)
+- [rdpsign - Firma de archivos RDP](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/rdpsign)
