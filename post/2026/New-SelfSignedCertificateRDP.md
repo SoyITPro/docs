@@ -52,7 +52,9 @@ Abre certlm.msc → Personal → Certificados
 
 - Copia el valor y elimina todos los espacios (debe quedar una cadena continua)
 
-> [!IMPORTANT] ⚠️ Importante: La huella debe ser una cadena continua sin espacios. Ejemplo válido: a94a1e8a27d8f257f8d7d5d9a3f2c1b0e4d5c6b7
+> [!IMPORTANT] 
+> ⚠️ Importante: La huella debe ser una cadena continua sin espacios y debe ser SHA256 (64 caracteres) para `rdpsign /sha256`.  
+> Ejemplo válido SHA256: 3f2c1b0e4d5c6b7a94a1e8a27d8f257f8d7d5d9a3f2c1b0e4d5c6b7a94a1e8a27d8f257f8
 
 ## ✍️ Paso 3: Firmar el archivo RDP
 Abre Símbolo del sistema (cmd.exe) como Administrador
