@@ -53,7 +53,7 @@ Abre certlm.msc → Personal → Certificados
 - Copia el valor y elimina todos los espacios (debe quedar una cadena continua)
 
 > [!IMPORTANT] 
-> ⚠️ Importante: La huella debe ser una cadena continua sin espacios y debe ser SHA256 (64 caracteres) para `rdpsign /sha256`.  
+> ⚠️ La huella debe ser una cadena continua sin espacios y debe ser SHA256 (64 caracteres) para `rdpsign /sha256`.  
 > Ejemplo válido SHA256: 3f2c1b0e4d5c6b7a94a1e8a27d8f257f8d7d5d9a3f2c1b0e4d5c6b7a94a1e8a27d8f257f8
 
 ## ✍️ Paso 3: Firmar el archivo RDP
@@ -106,7 +106,8 @@ Import-Certificate -FilePath "C:\Temp\mi-firma-rdp.cer" -CertStoreLocation "Cert
 
 
 ### Configurar Directiva de Grupo (GPO)
-> [!NOTE] Puedes distribuír la firma por GPO a los equipos del dominio para que confíen solo en esos .RDP con la firma establecida.
+> [!NOTE] 
+> Puedes distribuír la firma por GPO a los equipos del dominio para que confíen solo en esos .RDP con la firma establecida.
 
 Presiona Win + R, escribe gpedit.msc y presiona Enter
 
