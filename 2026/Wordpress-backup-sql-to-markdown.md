@@ -1,8 +1,13 @@
 # WordPress SQL to Hugo Ultimate Migrator
 
+## Referencias
+
+- **Script si solo quieres convertir SQL a Markdown**: [wordpress_sql_to_markdown.py](https://github.com/SoyITPro/scripts/blob/main/miscellany/wordpress_sql_to_markdown.py)
 
 
-Migrador avanzado para convertir un backup `.sql` de WordPress a una estructura completamente funcional para Hugo Static Site Generator, incluyendo:
+- **Script SQL a Markdown con referencia a Images en directorio Uploads**: [wordpress_sql_to_hugo.py](https://github.com/SoyITPro/scripts/blob/main/miscellany/wordpress_sql_to_markdown_images_uploads.py)
+
+Migrador avanzado para convertir un backup `.sql` de WordPress a una estructura markdown, incluyendo:
 
 - ✅ Conversión de posts a Markdown
 - ✅ Recuperación de categorías
@@ -42,8 +47,9 @@ Debes tener una carpeta de trabajo similar a esta:
 ```text
 wordpress-recovery/
 │
-├── jgaitpro_wpblog.sql
-├── wordpress_sql_to_hugo_ultimate.py
+├── wp_blog_file.sql
+├── wordpress_sql_to_markdown.py
+├── wordpress_sql_to_markdown_images_uploads.py
 └── uploads/
     ├── 2015/
     ├── 2016/
@@ -76,11 +82,11 @@ Ubícate dentro de la carpeta wordpress-recovery y ejecuta:
 
 - En Windows
 ``` powershell
-python wordpress_sql_to_hugo_ultimate.py
+python wordpress_sql_to_markdown.py
 ```
 - En Linux / Mac
 ``` bash
-python3 wordpress_sql_to_hugo_ultimate.py
+python3 wordpress_sql_to_markdown.py
 ```
 
 #### ¿Qué genera el script?
@@ -104,7 +110,7 @@ wordpress-recovery/
 
 ### ¿Qué contiene cada archivo Markdown?
 
-Cada post se exporta con Front Matter profesional para Hugo:
+Cada post se exporta:
 
 ---
 ``` text
@@ -114,17 +120,16 @@ slug: nombre-del-articulo
 author: "admin"
 featured_image: "/uploads/2018/07/imagen-destacada.jpg"
 categories:
-  - Windows Server
-  - Active Directory
 tags:
-  - DNS
-  - GPO
-
   ```
 ---
 
-## Referencias
 
-- **Script original**: [wordpress_sql_to_hugo.py](https://github.com/SoyITPro/scripts/blob/main/miscellany/wordpress_sql_to_hugo.py)
 
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Stable-success)
+![WordPress](https://img.shields.io/badge/WordPress-Recovery-orange)
+
+Advanced migration utility to recover legacy WordPress blogs from `.sql` database dumps and `uploads/` folders into a fully compatible static site markdown structure.
 
