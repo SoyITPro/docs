@@ -1,4 +1,4 @@
-# WordPress SQL to Hugo Ultimate Migrator
+# WordPress SQL to Markdown Migrator
 
 ## Referencias
 
